@@ -15,4 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('send-main', 'Home@sendMail');
+Route::get('/sendgmail58', 'SendGmailController@sendgmail58');

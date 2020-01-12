@@ -4,16 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Employee;
 use Illuminate\Http\Request;
+use Mail;
 
 class EmployeeController extends Controller
 {
-    public function getAllEmployees() {
-        // logic to get all students goes here
 
-    }
 
     public function createEmployee(Request $request) {
         // logic to create a employee record goes here
+
         $employee = new Employee();
         $employee->employee_name = $request->employee_name;
         $employee->national_id = $request->national_id;
@@ -23,7 +22,30 @@ class EmployeeController extends Controller
         $employee->status = $request->status;
         $employee->position = $request->position;
 
+
         $employee->save();
+
+        $to_name = $request->employee_name;
+        $to_email = $request->email;
+
+        $data = array('name'=>"Manishimwe emmanuel", "body" => "Gmail from Awesomity");
+
+        Mail::send('gmailview', $data, function($message) use($to_email,$to_name){
+            $message->to($to_email, $to_name)
+                ->subject('From Awesomity');
+            $message->from('manishimweemmanuel8@gmail.com',' Emmanuel Manishimwe');
+
+        });
+
+        if (Mail::failures()) {
+            return response()->Fail('Sorry! Please try again latter');
+        }else{
+            return response()->json('Yes, You have sent email to GMAIL from LARAVEL 5.8 !!');
+        }
+
+
+
+
 
         return response()->json([
             "message" => "Employee record created"
